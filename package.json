@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "cd ai-agent-project && npm run dev"
+  },
+  "dependencies": {
+    "firebase": "^12.7.0"
+  }
+}
