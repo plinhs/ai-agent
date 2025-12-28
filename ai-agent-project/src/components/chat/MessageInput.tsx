@@ -17,17 +17,12 @@ export default function MessageInput({
   }
 
   return (
-    <div style={{ display: "flex", gap: 8 }}>
+    <div className="input-container">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Type a message…"
-        style={{
-          flex: 1,
-          padding: "10px 12px",
-          borderRadius: 10,
-          border: "1px solid #d1d5db",
-        }}
+        className="message-input"
         onKeyDown={(e) => {
           if (e.key === "Enter") handleSend();
         }}
@@ -35,12 +30,7 @@ export default function MessageInput({
       />
       <button
         onClick={handleSend}
-        style={{
-          padding: "10px 14px",
-          borderRadius: 10,
-          border: "1px solid #d1d5db",
-          cursor: "pointer",
-        }}
+        className="send-button"
         disabled={disabled}
       >
         Send

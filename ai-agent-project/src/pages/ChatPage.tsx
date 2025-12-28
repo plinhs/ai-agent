@@ -1,20 +1,58 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ChatWindow from "../components/chat/ChatWindow";
 import MessageInput from "../components/chat/MessageInput";
 import type { ChatMessage } from "../types/chat";
 import { sendUserMessage, subscribeToMessages } from "../lib/chatRepo";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 export default function ChatPage() {
-  // For now: fixed chatId (later you can generate per user)
   const chatId = useMemo(() => "demo-chat", []);
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
+  const greetingSentRef = useRef(false);
+
 
   useEffect(() => {
     const unsub = subscribeToMessages(chatId, setMessages);
     return () => unsub();
   }, [chatId]);
+
+ useEffect(() => {
+  if (greetingSentRef.current) return;
+
+  if (messages.length > 0) {
+    greetingSentRef.current = true;
+    return;
+  }
+
+  greetingSentRef.current = true;
+
+  const sendGreeting = async () => {
+    await addDoc(
+      collection(db, "chats", chatId, "messages"),
+      {
+        role: "assistant",
+        text:
+          "Hello! How can I assist you today?\n\n" +
+          "• Check bill\n" +
+          "(Check bill for January 2024)\n" +
+          "• View bill details\n" +
+          "(View bill details for March 2025)\n" + 
+          "• Pay a bill\n" +
+          "(Pay bill for October 2024)",
+        createdAt: serverTimestamp(),
+      }
+    );
+  };
+
+  sendGreeting();
+}, [chatId, messages.length]);
+
+
+
+
 
   async function handleSend(text: string) {
     try {
@@ -26,15 +64,15 @@ export default function ChatPage() {
   }
 
   return (
-    <div style={{ maxWidth: 820, margin: "30px auto", padding: "0 12px" }}>
-      <h2 style={{ marginBottom: 8 }}>Billing AI Agent</h2>
-      <p style={{ marginTop: 0, color: "#6b7280" }}>
-        Send a message like “Pay my bill for subscriber 1001 for 2024-10 amount 100”.
-      </p>
-
-      <ChatWindow messages={messages} />
-      <div style={{ marginTop: 12 }}>
-        <MessageInput onSend={handleSend} disabled={sending} />
+    <div className="page-container">
+      <div className="chat-box">
+        <div className="chat-header">
+          <h2>Billing AI Agent</h2>
+        </div>
+        <ChatWindow messages={messages} />
+        <div className="chat-input">
+          <MessageInput onSend={handleSend} disabled={sending} />
+        </div>
       </div>
     </div>
   );

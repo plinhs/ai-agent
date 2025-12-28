@@ -37,7 +37,7 @@ export function subscribeToMessages(
         id: d.id,
         role: data.role,
         text: data.text,
-        createdAt: data.createdAt ?? null,
+        createdAt: data.createdAt?.toMillis?.() ?? Date.now(),
       };
     });
     onChange(msgs);

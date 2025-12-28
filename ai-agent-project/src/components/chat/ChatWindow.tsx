@@ -1,20 +1,13 @@
 import type { ChatMessage } from "../../types/chat";
 import MessageBubble from "./MsgBubble";
+import "../../App.css";
 
 export default function ChatWindow({ messages }: { messages: ChatMessage[] }) {
   return (
-    <div
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: 14,
-        padding: 14,
-        height: 520,
-        overflowY: "auto",
-        background: "white",
-      }}
+    <div className="chat-window"
     >
       {messages.length === 0 ? (
-        <div style={{ color: "#6b7280" }}>No messages yet.</div>
+        <div className="empty-state">No messages yet.</div>
       ) : (
         messages.map((m) => <MessageBubble key={m.id} msg={m} />)
       )}
