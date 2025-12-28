@@ -3,6 +3,8 @@
 This project implements an AI-based billing assistant that allows users to interact with a billing system using natural language. The assistant can check bills, view detailed bill information, and pay outstanding balances.
 The project is designed to run locally and does not require deployment to a cloud hosting service.
 
+explanation video link: https://youtu.be/u-HrqxLgm6Y
+
 ---
 
 ## Project Goals
